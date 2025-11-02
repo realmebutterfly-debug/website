@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Haroon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        body {
+            background-color: #ffecf1;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Batman Logo Background */
+        .batman-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23ffb6c1" d="M50,10 C60,10 70,15 75,25 C80,35 80,45 75,55 C70,65 60,70 50,70 C40,70 30,65 25,55 C20,45 20,35 25,25 C30,15 40,10 50,10 Z M40,30 L40,50 L30,50 L30,60 L40,60 L40,70 L50,70 L50,60 L60,60 L60,50 L50,50 L50,30 L40,30 Z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60%;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        /* Hearts */
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            color: pink;
+            font-size: 24px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        /* Main Title */
+        .title {
+            font-size: 4rem;
+            color: #ff69b4;
+            text-shadow: 3px 3px 0 #ff1493;
+            margin-bottom: 2rem;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        /* Cartoon Boy */
+        .cartoon-boy {
+            position: relative;
+            width: 150px;
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+        
+        .cartoon-boy:hover {
+            transform: scale(1.1);
+        }
+        
+        .boy-head {
+            width: 100px;
+            height: 100px;
+            background-color: #ffdbac;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 25px;
+            z-index: 2;
+        }
+        
+        .boy-hair {
+            width: 110px;
+            height: 50px;
+            background-color: #000;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            z-index: 1;
+        }
+        
+        .boy-specs {
+            width: 80px;
+            height: 30px;
+            border: 3px solid #333;
+            border-radius: 10px;
+            position: absolute;
+            top: 40px;
+            left: 35px;
+            z-index: 3;
+        }
+        
+        .boy-body {
+            width: 80px;
+            height: 80px;
+            background-color: #4a86e8;
+            border-radius: 20px;
+            position: absolute;
+            top: 100px;
+            left: 35px;
+            z-index: 1;
+        }
+        
+        .boy-arm {
+            width: 20px;
+            height: 60px;
+            background-color: #4a86e8;
+            border-radius: 10px;
+            position: absolute;
+            top: 110px;
+            z-index: 0;
+        }
+        
+        .boy-arm.left {
+            left: 15px;
+            transform: rotate(-30deg);
+            animation: wave 2s infinite;
+            transform-origin: top center;
+        }
+        
+        .boy-arm.right {
+            right: 15px;
+            transform: rotate(30deg);
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(-30deg); }
+            50% { transform: rotate(-60deg); }
+        }
+        
+        .boy-leg {
+            width: 25px;
+            height: 60px;
+            background-color: #2e5cb8;
+            border-radius: 10px;
+            position: absolute;
+            top: 175px;
+            z-index: 0;
+        }
+        
+        .boy-leg.left {
+            left: 45px;
+        }
+        
+        .boy-leg.right {
+            right: 45px;
+        }
+        
+        .boy-text {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            color: #ff69b4;
+            font-weight: bold;
+        }
+        
+        /* Buttons */
+        .options {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .btn-good {
+            background-color: #90EE90;
+            color: darkgreen;
+        }
+        
+        .btn-bad {
+            background-color: #FFB6C1;
+            color: darkred;
+        }
+        
+        .final-message {
+            font-size: 2.5rem;
+            color: #ff69b4;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.5;
+            text-shadow: 2px 2px 0 #ff1493;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts in the background -->
+    <div class="hearts" id="hearts-container"></div>
+    
+    <!-- Batman Logo Background -->
+    <div class="batman-bg"></div>
+    
+    <!-- Screen 1: Hello Haroon -->
+    <div class="screen" id="screen1">
+        <h1 class="title">Hello Haroon</h1>
+        <div class="cartoon-boy" id="boy">
+            <div class="boy-hair"></div>
+            <div class="boy-head"></div>
+            <div class="boy-specs"></div>
+            <div class="boy-body"></div>
+            <div class="boy-arm left"></div>
+            <div class="boy-arm right"></div>
+            <div class="boy-leg left"></div>
+            <div class="boy-leg right"></div>
+            <div class="boy-text">Click me! Hello!</div>
+        </div>
+    </div>
+    
+    <!-- Screen 2: How are you? -->
+    <div class="screen hidden" id="screen2">
+        <h1 class="title">How are you?</h1>
+        <div class="options">
+            <button class="btn btn-good" id="btn-good">Good</button>
+            <button class="btn btn-bad" id="btn-bad">Bad</button>
+        </div>
+    </div>
+    
+    <!-- Screen 3: Good response -->
+    <div class="screen hidden" id="screen3">
+        <h1 class="final-message">Good to know, I LOVE YOU</h1>
+    </div>
+    
+    <!-- Screen 4: Bad response -->
+    <div class="screen hidden" id="screen4">
+        <h1 class="final-message">Know that I'm always there for you I LOVE YOU</h1>
+    </div>
+
+    <script>
+        // Create hearts in the background
+        const heartsContainer = document.getElementById('hearts-container');
+        const heartCount = 30;
+        
+        for (let i = 0; i < heartCount; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.top = `${Math.random() * 100}%`;
+            heart.style.animationDelay = `${Math.random() * 5}s`;
+            heart.style.fontSize = `${Math.random() * 20 + 15}px`;
+            heart.style.opacity = `${Math.random() * 0.5 + 0.3}`;
+            heartsContainer.appendChild(heart);
+        }
+        
+        // Screen navigation
+        const screen1 = document.getElementById('screen1');
+        const screen2 = document.getElementById('screen2');
+        const screen3 = document.getElementById('screen3');
+        const screen4 = document.getElementById('screen4');
+        const boy = document.getElementById('boy');
+        const btnGood = document.getElementById('btn-good');
+        const btnBad = document.getElementById('btn-bad');
+        
+        boy.addEventListener('click', () => {
+            screen1.classList.add('hidden');
+            screen2.classList.remove('hidden');
+        });
+        
+        btnGood.addEventListener('click', () => {
+            screen2.classList.add('hidden');
+            screen3.classList.remove('hidden');
+        });
+        
+        btnBad.addEventListener('click', () => {
+            screen2.classList.add('hidden');
+            screen4.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
